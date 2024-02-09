@@ -1,37 +1,47 @@
 <?php
+/**
+ * @copyright Copyright (c) 2024 Magebit, Ltd. (https://magebit.com/)
+ * @author    Magebit <info@magebit.com>
+ * @license   MIT
+ */
+declare(strict_types=1);
+
 namespace Magebit\PageListWidget\Block\Widget;
 
 use Magento\Framework\View\Element\Template;
 use Magento\Widget\Block\BlockInterface;
 use Magento\Cms\Model\PageFactory;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Cms\Model\ResourceModel\Page\Collection;
+use Magento\Cms\Model\Page;
 
 class PageList extends Template implements BlockInterface
 {
     /**
      * Display mode options
      */
-    const DISPLAY_ALL = 'all';
-    const DISPLAY_SPECIFIC = 'specific';
+    public const DISPLAY_ALL = 'all';
+    public const DISPLAY_SPECIFIC = 'specific';
 
     /**
      * @var string
      */
-    protected $_template = "page-list.phtml";
+    protected $_template = "Magebit_PageListWidget::page-list.phtml";
 
     /**
-     * @var \Magento\Cms\Model\PageFactory
+     * @var PageFactory
      */
-    protected $pageFactory;
+    protected PageFactory $pageFactory;
 
     /**
      * Constructor
      *
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Cms\Model\PageFactory $pageFactory
+     * @param Context $context
+     * @param PageFactory $pageFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
+        Context $context,
         PageFactory $pageFactory,
         array $data = []
     ) {
@@ -44,7 +54,7 @@ class PageList extends Template implements BlockInterface
      *
      * @return array
      */
-    public function getDisplayModeOptions()
+    public function getDisplayModeOptions() :array
     {
         return [
             self::DISPLAY_ALL => __('All Pages'),
@@ -57,21 +67,21 @@ class PageList extends Template implements BlockInterface
      *
      * @return array|null
      */
-    public function getSelectedPages()
+    public function getSelectedPages(): ?array
     {
         $selectedPages = $this->getData('selected_pages');
         if (!is_array($selectedPages)) {
             $selectedPages = explode(',', $selectedPages);
         }
-        return $selectedPages;
+         return $selectedPages;
     }
 
     /**
      * Retrieve CMS pages
      *
-     * @return \Magento\Cms\Model\ResourceModel\Page\Collection
+     * @return Collection
      */
-    public function getCmsPages()
+    public function getCmsPages(): Collection
     {
         return $this->pageFactory->create()->getCollection()->addFieldToSelect('*');
     }
@@ -79,10 +89,34 @@ class PageList extends Template implements BlockInterface
     /**
      * Retrieve the page factory
      *
-     * @return \Magento\Cms\Model\PageFactory
+     * @return PageFactory
      */
-    public function getPageFactory()
+    public function getPageFactory(): PageFactory
     {
         return $this->pageFactory;
+    }
+
+    /**
+     * Retrieve the CMS page data by page ID
+     *
+     * @param int $pageId
+     * @return Page|null
+     */
+    public function getPageData($pageId): ?Page
+    {
+        $page = $this->getPageFactory()->create()->load($pageId);
+        return $page->getId() ? $page : null;
+    }
+
+    /**
+     * Generate the URL for a CMS page by page ID
+     *
+     * @param int $pageId
+     * @return string
+     */
+    public function getPageUrl($pageId): string
+    {
+        $page = $this->getPageData($pageId);
+        return $page ? $this->getUrl('cms/page/view', ['page_id' => $page->getId()]) : '#';
     }
 }

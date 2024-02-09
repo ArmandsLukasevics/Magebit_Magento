@@ -1,0 +1,22 @@
+<?php
+/**
+ * @var \Magebit\PageListWidget\Block\Widget\PageList $block
+ */
+?>
+
+<h2><?= $block->getTitle() ?></h2>
+
+<ul>
+    <?php if ($block->getDisplayMode() == 'all'): ?>
+        <?php foreach ($block->getCmsPages() as $page): ?>
+            <li><a href="<?= $block->getUrl('cms/page/view', ['page_id' => $page->getId()]) ?>"><?= $block->escapeHtml($page->getTitle()) ?></a></li>
+        <?php endforeach; ?>
+    <?php elseif ($block->getDisplayMode() == 'specific'): ?>
+        <?php foreach ($block->getSelectedPages() as $pageId): ?>
+            <?php $page = $block->getPageFactory()->create()->load($pageId); ?>
+            <?php if ($page->getId()): ?>
+                <li><a href="<?= $block->getUrl('cms/page/view', ['page_id' => $page->getId()]) ?>"><?= $block->escapeHtml($page->getTitle()) ?></a></li>
+            <?php endif; ?>
+        <?php endforeach; ?>
+    <?php endif; ?>
+</ul>

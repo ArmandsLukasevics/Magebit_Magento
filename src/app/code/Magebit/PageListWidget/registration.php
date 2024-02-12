@@ -4,6 +4,7 @@
  * @author    Magebit <info@magebit.com>
  * @license   MIT
  */
+
 declare(strict_types=1);
 
 use Magento\Framework\Component\ComponentRegistrar;

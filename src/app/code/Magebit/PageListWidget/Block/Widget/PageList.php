@@ -4,6 +4,7 @@
  * @author    Magebit <info@magebit.com>
  * @license   MIT
  */
+
 declare(strict_types=1);
 
 namespace Magebit\PageListWidget\Block\Widget;
@@ -50,19 +51,6 @@ class PageList extends Template implements BlockInterface
     }
 
     /**
-     * Retrieve options
-     *
-     * @return array
-     */
-    public function getDisplayModeOptions() :array
-    {
-        return [
-            self::DISPLAY_ALL => __('All Pages'),
-            self::DISPLAY_SPECIFIC => __('Specific Pages')
-        ];
-    }
-
-    /**
      * Retrieve selected pages
      *
      * @return array|null
@@ -105,7 +93,7 @@ class PageList extends Template implements BlockInterface
     public function getPageData($pageId): ?Page
     {
         $page = $this->getPageFactory()->create()->load($pageId);
-        return $page->getId() ? $page : null;
+         return $page->getId() ? $page : null;
     }
 
     /**
@@ -117,6 +105,29 @@ class PageList extends Template implements BlockInterface
     public function getPageUrl($pageId): string
     {
         $page = $this->getPageData($pageId);
-        return $page ? $this->getUrl('cms/page/view', ['page_id' => $page->getId()]) : '#';
+         return $page ? $this->getUrl('cms/page/view', ['page_id' => $page->getId()]) : '#';
+    }
+
+    /**
+     * Get CMS pages based on display mode
+     *
+     * @return Collection|array|null
+     */
+    public function getPagesByDisplayMode()
+    {
+        if ($this->getDisplayMode() === 'all') {
+            return $this->getCmsPages()->getItems();
+        } elseif ($this->getDisplayMode() === 'specific') {
+            $selectedPageIds = $this->getSelectedPages();
+            $pages = [];
+            foreach ($selectedPageIds as $pageId) {
+                $page = $this->getPageData($pageId);
+                if ($page !== null) {
+                    $pages[] = $page;
+                }
+            }
+             return $pages;
+        }
+         return null;
     }
 }

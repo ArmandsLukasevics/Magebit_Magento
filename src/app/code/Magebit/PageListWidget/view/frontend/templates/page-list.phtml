@@ -4,34 +4,23 @@
  * @author    Magebit <info@magebit.com>
  * @license   MIT
  */
+
+declare(strict_types=1);
+
 use Magebit\PageListWidget\Block\Widget\PageList;
 use Magento\Framework\Escaper;
 
-/**
- * @var PageList $block
- */
-
+/** @var PageList $block  */
 /** @var Escaper $escaper */
-?>
 
+?>
 <h2><?= $escaper->escapeHtmlAttr($block->getTitle()) ?></h2>
 
 <ul>
-    <?php if ($block->getDisplayMode() === 'all'): ?>
-        <?php foreach ($block->getCmsPages() as $pageId): ?>
-            <?php $page = $block->getPageData($pageId); ?>
-            <?php if ($page): ?>
-                <?php $url = $block->getPageUrl($pageId); ?>
-                <li><a href="<?= $url ?>"><?= $block->escapeHtml($page->getTitle()) ?></a></li>
-            <?php endif; ?>
-        <?php endforeach; ?>
-    <?php elseif ($block->getDisplayMode() == 'specific'): ?>
-        <?php foreach ($block->getSelectedPages() as $pageId): ?>
-            <?php $page = $block->getPageData($pageId); ?>
-            <?php if ($page): ?>
-                <?php $url = $block->getPageUrl($pageId); ?>
-                <li><a href="<?= $url ?>"><?= $block->escapeHtml($page->getTitle()) ?></a></li>
-            <?php endif; ?>
+    <?php $pages = $block->getPagesByDisplayMode(); ?>
+    <?php if ($pages): ?>
+        <?php foreach ($pages as $page): ?>
+            <li><a href="<?= $block->escapeUrl($block->getPageUrl($page->getId())) ?>"><?= $block->escapeHtml($page->getTitle()) ?></a></li>
         <?php endforeach; ?>
     <?php endif; ?>
 </ul>

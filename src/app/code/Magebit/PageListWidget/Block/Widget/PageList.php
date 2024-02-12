@@ -61,6 +61,7 @@ class PageList extends Template implements BlockInterface
         if (!is_array($selectedPages)) {
             $selectedPages = explode(',', $selectedPages);
         }
+
          return $selectedPages;
     }
 

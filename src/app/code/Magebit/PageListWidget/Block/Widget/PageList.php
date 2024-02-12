@@ -87,10 +87,10 @@ class PageList extends Template implements BlockInterface
     /**
      * Retrieve the CMS page data by page ID
      *
-     * @param int $pageId
+     * @param string $pageId
      * @return Page|null
      */
-    public function getPageData($pageId): ?Page
+    public function getPageData(string $pageId): ?Page
     {
         $page = $this->getPageFactory()->create()->load($pageId);
          return $page->getId() ? $page : null;
@@ -99,10 +99,10 @@ class PageList extends Template implements BlockInterface
     /**
      * Generate the URL for a CMS page by page ID
      *
-     * @param int $pageId
+     * @param string $pageId
      * @return string
      */
-    public function getPageUrl($pageId): string
+    public function getPageUrl(string $pageId): string
     {
         $page = $this->getPageData($pageId);
          return $page ? $this->getUrl('cms/page/view', ['page_id' => $page->getId()]) : '#';

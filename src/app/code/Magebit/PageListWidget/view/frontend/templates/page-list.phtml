@@ -15,7 +15,6 @@ use Magento\Framework\Escaper;
 
 ?>
 <h2><?= $escaper->escapeHtmlAttr($block->getTitle()) ?></h2>
-
 <ul>
     <?php $pages = $block->getPagesByDisplayMode(); ?>
     <?php if ($pages): ?>

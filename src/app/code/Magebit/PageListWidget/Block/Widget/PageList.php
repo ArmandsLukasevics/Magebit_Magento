@@ -93,6 +93,7 @@ class PageList extends Template implements BlockInterface
     public function getPageData(string $pageId): ?Page
     {
         $page = $this->getPageFactory()->create()->load($pageId);
+
          return $page->getId() ? $page : null;
     }
 
@@ -105,6 +106,7 @@ class PageList extends Template implements BlockInterface
     public function getPageUrl(string $pageId): string
     {
         $page = $this->getPageData($pageId);
+
          return $page ? $this->getUrl('cms/page/view', ['page_id' => $page->getId()]) : '#';
     }
 
@@ -120,14 +122,17 @@ class PageList extends Template implements BlockInterface
         } elseif ($this->getDisplayMode() === 'specific') {
             $selectedPageIds = $this->getSelectedPages();
             $pages = [];
+
             foreach ($selectedPageIds as $pageId) {
                 $page = $this->getPageData($pageId);
                 if ($page !== null) {
                     $pages[] = $page;
                 }
             }
+
              return $pages;
         }
+
          return null;
     }
 }

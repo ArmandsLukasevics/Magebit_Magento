@@ -1,0 +1,25 @@
+<?php
+/**
+ * @copyright Copyright (c) 2024 Magebit, Ltd. (https://magebit.com/)
+ * @author    Magebit <info@magebit.com>
+ * @license   MIT
+ */
+
+declare(strict_types=1);
+
+use Magebit\PageListWidget\Block\Widget\PageList;
+use Magento\Framework\Escaper;
+
+/** @var PageList $block  */
+/** @var Escaper $escaper */
+
+?>
+<h2><?= $escaper->escapeHtmlAttr($block->getTitle()) ?></h2>
+<ul>
+    <?php $pages = $block->getPagesByDisplayMode(); ?>
+    <?php if ($pages): ?>
+        <?php foreach ($pages as $page): ?>
+            <li><a href="<?= $block->escapeUrl($block->getPageUrl($page->getId())) ?>"><?= $block->escapeHtml($page->getTitle()) ?></a></li>
+        <?php endforeach; ?>
+    <?php endif; ?>
+</ul>

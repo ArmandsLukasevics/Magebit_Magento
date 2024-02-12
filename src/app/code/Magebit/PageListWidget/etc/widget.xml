@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @copyright Copyright (c) 2024 Magebit (https://magebit.com/)
+ * @author    Magebit <info@magebit.com>
+ * @license   GNU General Public License ("GPL") v3.0
+ */
+-->
+<widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd">
+    <widget id="magebit_page_list_widget" class="Magebit\PageListWidget\Block\Widget\PageList"
+            is_email_compatible="false" placeholder_image="Magento_Cms::images/widget_page_builder.png" ttl="86400">
+        <label>Magebit Page List Widget</label>
+        <description>Display a list of CMS pages</description>
+        <parameters>
+            <parameter name="title" xsi:type="text" required="false">
+                <label>Title</label>
+            </parameter>
+            <parameter name="display_mode" xsi:type="select" required="true">
+                <label>Display Mode</label>
+                <options>
+                    <option name="all" value="all">
+                        <label>All Pages</label>
+                    </option>
+                    <option name="specific" value="specific">
+                        <label>Specific Pages</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="selected_pages" xsi:type="multiselect" required="false"
+                       source_model="Magento\Cms\Model\Config\Source\Page">
+                <label>Selected Pages</label>
+                <depends>
+                    <parameter name="display_mode" value="specific" />
+                </depends>
+            </parameter>
+        </parameters>
+    </widget>
+</widgets>
